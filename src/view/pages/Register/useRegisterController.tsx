@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { authService } from '../../../app/services/authService/intex';
 
 const schema = z.object({
   name: z.string().nonempty('Nome é obrigatório'),
@@ -25,10 +26,10 @@ export function useRegisterController() {
     resolver: zodResolver(schema),
   });
 
-  const handleSubmit = hookFormHandleSubmit((data) => {
-    const result = schema.safeParse(data);
+  const handleSubmit = hookFormHandleSubmit(async (data) => {
+    const { accessToken } = await authService.signup(data);
 
-    console.log(result);
+    console.log(accessToken);
   });
 
   return { handleSubmit, register, errors };
