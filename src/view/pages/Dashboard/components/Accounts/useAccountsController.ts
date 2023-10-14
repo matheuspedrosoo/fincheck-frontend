@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useWindowWidth } from './../../../../../app/hooks/useWindowWidth';
 import { useDashboard } from '../DashboardContext/useDashboard';
+import { useBankAccounts } from '../../../../../app/hooks/useBankAccounts';
 
 export function useAccountsController() {
   const windowWidth = useWindowWidth();
@@ -12,14 +13,24 @@ export function useAccountsController() {
     isEnd: false,
   });
 
+  const { accounts, isFetching } = useBankAccounts();
+
+  const curretBalance = useMemo(() => {
+    return accounts.reduce(
+      (total, account) => total + account.currentBalance,
+      0
+    );
+  }, [accounts]);
+
   return {
     sliderState,
     setSliderState,
     windowWidth,
     areValuesVisible,
     toogleValueVisibility,
-    isLoading: false,
-    accounts: [],
+    isLoading: isFetching,
+    accounts,
     openNewAccountModal,
+    curretBalance,
   };
 }

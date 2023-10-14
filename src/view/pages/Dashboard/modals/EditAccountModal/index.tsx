@@ -5,23 +5,49 @@ import { Input } from '../../../../components/Input';
 import { InputCurrency } from '../../../../components/InputCurrency';
 import { Modal } from '../../../../components/Modal';
 import { Select } from '../../../../components/Select';
-import { useNewAccountModalController } from './useNewAccountModalController';
+import { useEditAccountModalController } from './useEditAccountModalController';
+import { TrashIcon } from '../../../../components/icons/TrashIcon';
+import { ConfirmDeleteModal } from '../../../../components/ConfirmDeleteModal';
 
-export function NewAccountModal() {
+export function EditAccountModal() {
   const {
-    isNewAccountModalOpen,
-    closeNewAccountModal,
+    isEditAccountModalOpen,
+    closeEditAccountModal,
     register,
     errors,
     handleSubmit,
     control,
     isLoading,
-  } = useNewAccountModalController();
+    isDeleteModalOpen,
+    handleOpenDeleteModal,
+    handleCloseDeleteModal,
+    handleDeleteAccount,
+    isLoadingDelete,
+  } = useEditAccountModalController();
+
+  if (isDeleteModalOpen) {
+    return (
+      <ConfirmDeleteModal
+        onConfirm={handleDeleteAccount}
+        title="Tem certeza quer deseja excluir esta conta?"
+        description="Ao excluir a conta, também serão excluídos todos os registros de
+        receita e despesas relacionados."
+        onClose={handleCloseDeleteModal}
+        isLoading={isLoadingDelete}
+      />
+    );
+  }
+
   return (
     <Modal
-      title="Nova Conta"
-      open={isNewAccountModalOpen}
-      onClose={closeNewAccountModal}
+      title="Editar Conta"
+      open={isEditAccountModalOpen}
+      onClose={closeEditAccountModal}
+      rightAction={
+        <button onClick={handleOpenDeleteModal}>
+          <TrashIcon className="w-6 h-6 text-red-900" />
+        </button>
+      }
     >
       <form onSubmit={handleSubmit}>
         <div>
@@ -97,7 +123,7 @@ export function NewAccountModal() {
         </div>
 
         <Button type="submit" className="w-full mt-6" isLoading={isLoading}>
-          Criar
+          Salvar
         </Button>
       </form>
     </Modal>
