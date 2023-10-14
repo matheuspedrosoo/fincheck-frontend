@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useBankAccounts } from '../../../../../app/hooks/useBankAccounts';
 import { useCategories } from '../../../../../app/hooks/useCategories';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Transaction } from '../../../../../app/entities/Transaction';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { transactionService } from '../../../../../app/services/transactionsService';
@@ -43,11 +43,17 @@ export function useEditTransactionModalController(
   const { accounts } = useBankAccounts();
   const { categories: categoriesList } = useCategories();
   const queryClient = useQueryClient();
-  const { isLoading, mutateAsync } = useMutation(transactionService.update);
+  const { isLoading, mutateAsync: updateTransaction } = useMutation(
+    transactionService.update
+  );
+  const { isLoading: isLoadingDelete, mutateAsync: removeTransaction } =
+    useMutation(transactionService.remove);
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleSubmit = hookFormSubmit(async (data) => {
     try {
-      await mutateAsync({
+      await updateTransaction({
         ...data,
         id: transaction!.id,
         value: currencyStringToNumber(data.value),
@@ -79,6 +85,36 @@ export function useEditTransactionModalController(
     );
   }, [categoriesList, transaction]);
 
+  async function handleDeleteTransaction() {
+    try {
+      await removeTransaction(transaction!.id);
+
+      queryClient.invalidateQueries({
+        queryKey: ['transactions'],
+      });
+      toast.success(
+        transaction!.type === 'EXPENSE'
+          ? 'A despesa foi deletada com sucesso!'
+          : 'A receita foi deletada com sucesso!'
+      );
+      onClose();
+    } catch (error) {
+      toast.error(
+        transaction!.type === 'EXPENSE'
+          ? 'Erro ao deletar a despesa!'
+          : 'Erro ao deletar a receita!'
+      );
+    }
+  }
+
+  function handleOpenDeleteModal() {
+    setIsDeleteModalOpen(true);
+  }
+
+  function handleCloseDeleteModal() {
+    setIsDeleteModalOpen(false);
+  }
+
   return {
     register,
     errors,
@@ -87,5 +123,10 @@ export function useEditTransactionModalController(
     accounts,
     categories,
     isLoading,
+    isDeleteModalOpen,
+    isLoadingDelete,
+    handleDeleteTransaction,
+    handleCloseDeleteModal,
+    handleOpenDeleteModal,
   };
 }
