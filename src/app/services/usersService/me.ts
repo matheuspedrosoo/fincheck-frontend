@@ -1,16 +1,10 @@
+import { User } from '../../entities/User';
 import { httpClient } from '../httpClient';
 
-export interface SigninParams {
-  name: string;
-  email: string;
-}
-
-interface SigninResponse {
-  accessToken: string;
-}
+type MeResponse = User;
 
 export async function me() {
-  const { data } = await httpClient.get<SigninResponse>('/users/me');
+  const { data } = await httpClient.get<MeResponse>('/users/me');
 
   return data;
 }
