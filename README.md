@@ -1,27 +1,26 @@
-# React + TypeScript + Vite
+# Fincheck - Controle de finanças
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<img src="./github/preview.png" alt="preview">
 
-Currently, two official plugins are available:
+### Fincheck é uma aplicação para gerenciamento de finanças pessoais. Monitore seus gastos de forma simples, podendo filtrar por conta, categoria e data.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<br />
 
-## Expanding the ESLint configuration
+## 👩‍💻 Tecnologias usadas
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Back-end
 
-- Configure the top-level `parserOptions` property like this:
+    * NestJS
+    * Typescript
+    * PostgreSQL
+    * Prisma
+    * Docker
+    * JWT
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+### Front-end Web
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+    * React / Vite
+    * Typescript
+    * TailwindCSS
+    * Zod
+    * React Query
