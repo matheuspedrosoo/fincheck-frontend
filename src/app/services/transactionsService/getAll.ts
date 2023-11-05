@@ -1,5 +1,5 @@
 import { Transaction } from '../../entities/Transaction';
-import { httpClient } from '../httpClient';
+import { httpClient } from '../HttpClient';
 
 type TransactionsResponse = Array<Transaction>;
 
